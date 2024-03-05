@@ -1,6 +1,6 @@
 "use client"
 import { Canvas } from "@react-three/fiber";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import { OrbitControls } from "@react-three/drei";
 import LaserPointer from "../models/LaserPointer"
@@ -12,12 +12,13 @@ import ConvexLens from "../models/ConvexLens";
 import TronRing from "../models/TronRIng";
 import Slit from "../models/Slit";
 import LaserBeam from "../models/LightBeam";
+import Model from "../models/Model";
 
-
+// some issue where a subsequent fetch request is not being 
 const Simulation = () => {
-  const { inputModel, filterModel, outputModel } = useModelContext()
+  const { inputModelUrl, filterModelUrl, outputModelUrl } = useModelContext()
 
-  
+
 
   return (
     <section className="w-full h-full bg-transparent resize-y">
@@ -29,10 +30,9 @@ const Simulation = () => {
           <ambientLight intensity={0.5}/>
           <hemisphereLight color={"#b1e1ff"}  groundColor={"#000000"} intensity={1}/>
 
-          { inputModel ? <GenerateModel model={inputModel}/> : <Slit /> }
-          { outputModel ? <GenerateModel model={outputModel}/> : <Slit /> }
-
           {/* <LaserBeam /> */}
+          { inputModelUrl.length > 0 ? <Model file={inputModelUrl} position={[-2, 0, 0]}/> : <Model file={"assets/3d/double_slit.gltf"} position={[-2, 0, 0]} /> }
+          { outputModelUrl.length > 0 ? <Model file={outputModelUrl} position={[2, 0, 0]}/> : <Model file={"assets/3d/double_slit_diffraction.gltf"} position={[2, 0, 0]} /> }
 
           <ConvexLens />
           <TronRing />

@@ -19,7 +19,7 @@ const SimulationContextProvider: React.FC<SimulationContextProviderProps> = ({ c
   const [color, setColor] = useState('#FF0000')
   const [inputImage, setInputImage] = useState<File | null>(null) //maybe have it point to double slit
   const [filterImage, setFilterImage] = useState<File | null>(null) //maybe have it point to default slit file
-
+  
   return (
     <SimulationContext.Provider value={{ 
       color, setColor,

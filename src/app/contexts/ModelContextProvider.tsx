@@ -2,12 +2,12 @@ import { useState, useContext, createContext } from "react";
 import type { ActiveModelType } from "../utils/types"; 
 
 type ModelContextType = {
-  inputModel: Blob | null,
-  setInputModel: React.Dispatch<React.SetStateAction<Blob | null>>,
-  filterModel: Blob | null,
-  setFilterModel: React.Dispatch<React.SetStateAction<Blob | null>>,
-  outputModel: Blob | null,
-  setOutputModel: React.Dispatch<React.SetStateAction<Blob | null>>,
+  inputModelUrl: string,
+  setInputModelUrl: React.Dispatch<React.SetStateAction<string>>,
+  filterModelUrl: string,
+  setFilterModelUrl: React.Dispatch<React.SetStateAction<string>>,
+  outputModelUrl: string,
+  setOutputModelUrl: React.Dispatch<React.SetStateAction<string>>,
   activeModel: ActiveModelType | null
   setActiveModel: React.Dispatch<React.SetStateAction<ActiveModelType | null>>
 }
@@ -16,19 +16,19 @@ const ModelContext = createContext<ModelContextType | null>(null)
 
 type ModelContextProviderProps = { children: React.ReactNode }
 const ModelContextProvider: React.FC<ModelContextProviderProps> = ({ children }) => {
-  const [inputModel, setInputModel] = useState<Blob | null>(null)
-  const [filterModel, setFilterModel] = useState<Blob | null>(null)
-  const [outputModel, setOutputModel] = useState<Blob | null>(null)
+  const [inputModelUrl, setInputModelUrl] = useState<string>("")
+  const [filterModelUrl, setFilterModelUrl] = useState<string>("")
+  const [outputModelUrl, setOutputModelUrl] = useState<string>("")
 
   const [activeModel, setActiveModel] = useState<ActiveModelType | null>(null)
 
 
   return (
     <ModelContext.Provider value={{ 
-      inputModel, setInputModel,
-      filterModel, setFilterModel,
-      outputModel, setOutputModel,
-      activeModel, setActiveModel 
+      inputModelUrl, setInputModelUrl,
+      filterModelUrl, setFilterModelUrl,
+      outputModelUrl, setOutputModelUrl,
+      activeModel, setActiveModel,
       }}>
       { children }
     </ModelContext.Provider>

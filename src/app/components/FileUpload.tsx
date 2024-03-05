@@ -32,7 +32,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ image, setImage }) => {
         <input
           type="file"
           onChange={handleOnChange}
-          className="border-2 border-gray-300 rounded-md px-3 py-2 text-sm"
+          className="border-2 border-gray-300 rounded-md px-3 py-2 text-sm w-32"
         />
         <img
           src={imageURL ? imageURL : 'https://placehold.co/600x400'}
