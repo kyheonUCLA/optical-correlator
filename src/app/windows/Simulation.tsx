@@ -11,13 +11,16 @@ import GenerateModel from "../components/GenerateModel";
 import ConvexLens from "../models/ConvexLens";
 import TronRing from "../models/TronRIng";
 import Slit from "../models/Slit";
-import LaserBeam from "../models/LightBeam";
 import Model from "../models/Model";
+import Test from "../components/Test";
+import LightBeam from "../models/LightBeam";
+import LightCone from "../models/LightCone";
+import { useSimulationContext } from "../contexts/SimulationContextProvider";
 
 // some issue where a subsequent fetch request is not being 
 const Simulation = () => {
   const { inputModelUrl, filterModelUrl, outputModelUrl } = useModelContext()
-
+  const { color } = useSimulationContext()
 
 
   return (
@@ -30,13 +33,16 @@ const Simulation = () => {
           <ambientLight intensity={0.5}/>
           <hemisphereLight color={"#b1e1ff"}  groundColor={"#000000"} intensity={1}/>
 
-          {/* <LaserBeam /> */}
           { inputModelUrl.length > 0 ? <Model file={inputModelUrl} position={[-2, 0, 0]}/> : <Model file={"assets/3d/double_slit.gltf"} position={[-2, 0, 0]} /> }
-          { outputModelUrl.length > 0 ? <Model file={outputModelUrl} position={[2, 0, 0]}/> : <Model file={"assets/3d/double_slit_diffraction.gltf"} position={[2, 0, 0]} /> }
+          { outputModelUrl.length > 0 ? <Model file={outputModelUrl} position={[10, 0, 0]}/> : <Model file={"assets/3d/double_slit_diffraction.gltf"} position={[10, 0, 0]} /> }
+          
+          <LightCone color={color} position={[-15,0,0]} target={[-11,0,0]} angle={Math.PI/24}/>
+          <LightBeam color={color} position={[-11,0,0]} target={[-2,0,0]} radius={1}/>
+          <LightBeam color={color} position={[-2,0,0]} target={[10,0,0]} radius={1}/>
 
-          <ConvexLens />
-          <TronRing />
-          <LaserPointer />
+          <ConvexLens position={[-6, 0, 0]}/>
+          {/* <TronRing /> */}
+          <LaserPointer position={[-7, 0, 0]}/>
         </Canvas>
       </Suspense>
 

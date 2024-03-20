@@ -26,7 +26,6 @@ const Configurator: React.FC<any> = () => {
         <FileUpload image={inputImage} setImage={setInputImage} />
         <div className='flex items-center justify-center mt-5'>
           <SimulateButton />
-          <Test />
         </div>
       </div>
 

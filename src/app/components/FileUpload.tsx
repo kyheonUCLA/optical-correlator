@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react'
+import { useSimulationContext } from '../contexts/SimulationContextProvider';
+import { useModelContext } from '../contexts/ModelContextProvider';
 
 type FileUploadProps = {
   image: File | null
   setImage: React.Dispatch<React.SetStateAction<File | null>>,
 }
+
 const FileUpload: React.FC<FileUploadProps> = ({ image, setImage }) => {
   const [imageURL, setImageURL] = useState<string | null>(null);
-  
+  const {setInputModelUrl} = useModelContext()
+
+
   useEffect(() => { 
     if (image) {
       setImageURL(URL.createObjectURL(image))
@@ -20,9 +25,23 @@ const FileUpload: React.FC<FileUploadProps> = ({ image, setImage }) => {
 
   }, [image])
 
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setImage(e.target.files[0])
+
+      try {
+        const data = new FormData()
+        data.set('file', e.target.files[0] as File)
+        const API_URI = 'http://127.0.0.1:5000/api/create_input_model' 
+        const res = await fetch(API_URI, { method: 'POST', body: data })
+        const jsonData = await res.json()
+        console.log('input', jsonData)
+  
+        setInputModelUrl(`${jsonData.url}?${Date.now()}`)
+      } catch (e: any) {
+        console.log(e)
+      }
+
     }
   } 
 

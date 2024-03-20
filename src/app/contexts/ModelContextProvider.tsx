@@ -1,4 +1,4 @@
-import { useState, useContext, createContext } from "react";
+import { useState, useContext, createContext, useRef } from "react";
 import type { ActiveModelType } from "../utils/types"; 
 
 type ModelContextType = {
@@ -9,7 +9,9 @@ type ModelContextType = {
   outputModelUrl: string,
   setOutputModelUrl: React.Dispatch<React.SetStateAction<string>>,
   activeModel: ActiveModelType | null
-  setActiveModel: React.Dispatch<React.SetStateAction<ActiveModelType | null>>
+  setActiveModel: React.Dispatch<React.SetStateAction<ActiveModelType | null>>,
+  addModelRef: (key: string, value: React.RefObject<any>) => void,
+  getModelRef: (key: string) => React.RefObject<any>,
 }
 
 const ModelContext = createContext<ModelContextType | null>(null)
@@ -21,7 +23,19 @@ const ModelContextProvider: React.FC<ModelContextProviderProps> = ({ children })
   const [outputModelUrl, setOutputModelUrl] = useState<string>("")
 
   const [activeModel, setActiveModel] = useState<ActiveModelType | null>(null)
+  const [modelRefs, setModelRefs] = useState<Record<string, React.RefObject<any>>>({})
+  
+  const addModelRef = (key: string, value: React.RefObject<any>) => {
+    setModelRefs(prevRefs => ({ ...prevRefs, [key]: value }));
+  };
 
+  const getModelRef = (key: string) => {
+    if (key in modelRefs) {
+      return modelRefs[key]
+    } else {
+      throw new Error(`the key '${key}' does not exist in modelRef hashtable`)
+    }
+  }
 
   return (
     <ModelContext.Provider value={{ 
@@ -29,6 +43,7 @@ const ModelContextProvider: React.FC<ModelContextProviderProps> = ({ children })
       filterModelUrl, setFilterModelUrl,
       outputModelUrl, setOutputModelUrl,
       activeModel, setActiveModel,
+      addModelRef, getModelRef
       }}>
       { children }
     </ModelContext.Provider>

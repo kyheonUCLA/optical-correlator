@@ -1,42 +1,31 @@
-import React from 'react'
-import { useSimulationContext } from '../contexts/SimulationContextProvider'
-import { useModelContext } from '../contexts/ModelContextProvider'
+// components/LaserBeamScene.tsx
+import React, { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import {Object3D} from "three"
 
-
-// instead of this whole blob business i should host the files 
-const Test = () => {
-  const { inputImage } = useSimulationContext()
-  const { setInputModelUrl, setOutputModelUrl } = useModelContext()
-
-  const handleOnClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    
-    if (!inputImage) {
-      return
-    }
-    
-    try {
-      const data = new FormData()
-      data.set('file', inputImage)
-      const API_URI = 'http://127.0.0.1:5000/api/create_input_model' 
-      const res = await fetch(API_URI, { method: 'POST', body: data })
-      const jsonData = await res.json()
-      console.log('input', jsonData)
-
-      setInputModelUrl(`${jsonData.url}?${Date.now()}`)
-    } catch (e: any) {
-      console.log(e)
-    }
-    
-    
-  }
-
-
-
+const Test: React.FC = () => {
+  const lightRef = useRef<any>();
+  const obj = new Object3D()
+  obj.position.set(1, 2, 1)
+  
   return (
-    <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 
-    font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none" onClick={handleOnClick}>Test</button>
+    <directionalLight
+        ref={lightRef}
+        position={[1, 1, 1]}
+        target={obj}
+        intensity={1} // Adjust intensity as needed
+        color="blue" // Set the color to blue
+        castShadow // Enable shadow casting
+        shadow-mapSize-width={1024} // Set shadow map size
+        shadow-mapSize-height={1024} // Set shadow map size
+        shadow-camera-top={2} // Set the cone angle
+        shadow-camera-bottom={-2} // Set the cone angle
+        shadow-camera-left={-2} // Set the cone angle
+        shadow-camera-right={2} // Set the cone angle
+        shadow-camera-near={0.01} // Set the near value for the shadow camera
+        shadow-camera-far={100} // Set the far value for the shadow camera
+      />
   )
-}
+};
 
-export default Test
+export default Test;
